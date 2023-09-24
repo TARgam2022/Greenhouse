@@ -1,20 +1,92 @@
-<!--<app-navbar></app-navbar>
-    <div class="container-fluid" style="padding: 2%;">
-       <div class="row">
-            <div class="col">
-                <app-temp></app-temp>
+<div style="padding: 2%;">
+<div class="row row-cols-1 row-cols-md-2">
+
+    <!-- temp -->
+
+    <div class="col mb-4">
+        <div class="card" style="height: 370px;">
+          <div class="card-body">
+            <div class="row g-0">
+                <div class="col">
+                  <img src="../assets/termometro.svg" alt="" style="width: 300px;">
+              </div>
+              <div class="col" style="padding: 10%;">
+                        <h1><b>Temperature</b></h1>
+                 <br>
+                 <h2 style="text-align: center;">{{data.temp}}</h2>
+                    <input type="number" id="humd" name="humd" min="0" max="50" value="25" style="width: 75px;">
+                    <p>set a value</p></div>
+              </div>
+              
+          </div>
+    </div>
+      </div>
+     <!-- humd -->
+      <div class="col mb-4">
+        <div class="card" style="height: 370px;">
+          <div class="card-body">
+            <div class="row g-0">
+                <div class="col">
+                  <img src="../assets/drop.svg" alt="" style="width: 300px;">
+              </div>
+              <div class="col" style="padding: 10%;">
+                        <h1><b>Humidity</b></h1>
+                 <br>
+                 <h2 style="text-align: center;">{{data.humi}}(%)</h2>
+                    <input type="number" id="humd" name="humd" min="0" max="100" value="45" style="width: 75px;">
+                    <p>set a value</p></div>
+              </div>
+              
+          </div>
+    </div>
+      </div>
+
+     <!-- Bright -->
+
+     <div class="col mb-4">
+        <div class="card" style="height: 370px;">
+          <div class="card-body">
+            <div class="row g-0">
+                <div class="col">
+                  <img src="../assets/sun.svg" alt="" style="width: 300px;">
+              </div>
+              <div class="col" style="padding: 10%;">
+                        <h1><b>Brightness</b></h1>
+                 <br>
+                 <h2 style="text-align: center;">{{data.bright}}(%)</h2>
+</div>
+              </div>
             </div>
-            <div class="col">
-                <app-humd></app-humd>
+        </div>
+    </div>
+
+    <!-- Soil -->
+
+    <div class="col mb-4">
+        <div class="card" style="height: 370px;">
+          <div class="card-body">
+            <div class="row g-0">
+                <div class="col">
+                  <img src="../assets/drop.svg" alt="" style="width: 300px;">
+              </div>
+              <div class="col" style="padding: 10%;">
+                        <h1><b>Soil Humidity</b></h1>
+                 <br>
+                 <h2 style="text-align: center;">{{data.sHumi}}(%)</h2>
+                    <input type="number" id="humd" name="humd" min="0" max="100" value="45" style="width: 75px;">
+                    <p>set a value</p></div>
+              </div>
             </div>
-            <div class="col">
-                <app-bright></app-bright>
-            </div>
-            <div class="col">
-                <app-soil></app-soil>
-            </div>
-       </div> 
-    </div> !-->
-<div class="card"><span>{{data.humi}}</span></div>
-<button type="button" class="btn btn-success" (click)="connect()">connect</button>
-<button type="button" class="btn btn-primary" (click)="start()">Start</button>
+        </div>
+    </div>
+
+  </div>
+
+  <div class="card" style="height: 65px;">
+    <div class="card-body" style="grid-gap: 20px;">
+        <button type="button" class="btn btn-primary" (click)="start()">Start</button>
+        <button type="button" class="btn btn-success" (click)="connect()">Connect</button>
+        <button type="button" class="btn btn-danger" (click)="dc()">Disconnect</button>
+    </div>
+  </div>
+</div>

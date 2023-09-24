@@ -15,7 +15,7 @@ styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
 
-
+ 
   public serial: any;
   public data : Data ;
   num = 0;
@@ -65,4 +65,12 @@ export class AppComponent {
   start(){
     this.serial.sendData("START");
   }
+
+  dc(): void {
+    if (this.port)
+      this.serial.close((port: any) => {
+        this.port = port;
+      });
+  }
+
 }
