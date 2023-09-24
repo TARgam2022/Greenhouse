@@ -1,0 +1,20 @@
+<!--<app-navbar></app-navbar>
+    <div class="container-fluid" style="padding: 2%;">
+       <div class="row">
+            <div class="col">
+                <app-temp></app-temp>
+            </div>
+            <div class="col">
+                <app-humd></app-humd>
+            </div>
+            <div class="col">
+                <app-bright></app-bright>
+            </div>
+            <div class="col">
+                <app-soil></app-soil>
+            </div>
+       </div> 
+    </div> !-->
+<div class="card"><span>{{data.humi}}</span></div>
+<button type="button" class="btn btn-success" (click)="connect()">connect</button>
+<button type="button" class="btn btn-primary" (click)="start()">Start</button>
