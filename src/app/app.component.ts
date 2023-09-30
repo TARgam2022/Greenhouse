@@ -98,37 +98,48 @@ export class AppComponent {
   
 
   sendState(){
-    
-    console.log(this.pumpStatRaw + " + " + this.fanStatRaw);
+    if(!this.auto){
+      console.log(this.pumpStatRaw + " + " + this.fanStatRaw);
 
-    if(this.pumpStatRaw){
-      this.pumpStat = 1;
-    }else{
-      this.pumpStat = 0;
+      if(this.pumpStatRaw){
+        this.pumpStat = 1;
+      }else{
+        this.pumpStat = 0;
+      }
+  
+      if(this.fanStatRaw){
+        this.fanStat = 1;
+      }
+      else{
+        this.fanStat = 0;
+      }
+      
+      
+      console.log(this.pumpStat + " + " + this.fanStat);
+      //this.serial.sendData(this.fanStat + ";" + this.pumpStat);
+      (async () => { 
+        // Do something before delay
+        console.log('before delay')
+        this.serial.sendData(this.fanStat + ";" + this.pumpStat);
+  
+        await new Promise(f => setTimeout(f, 2000));
+  
+        // Do something after
+        console.log('after delay')
+        this.serial.sendData(this.fanStat + ";0");
+        this.pumpStatRaw = false;
+      })();
     }
+  }
 
-    if(this.fanStatRaw){
-      this.fanStat = 1;
-    }
-    else{
-      this.fanStat = 0;
-    }
-    
-    
-    console.log(this.pumpStat + " + " + this.fanStat);
-    //this.serial.sendData(this.fanStat + ";" + this.pumpStat);
-    (async () => { 
-      // Do something before delay
-      console.log('before delay')
-      this.serial.sendData(this.fanStat + ";" + this.pumpStat);
-
-      await new Promise(f => setTimeout(f, 2000));
-
-      // Do something after
-      console.log('after delay')
-      this.serial.sendData(this.fanStat + ";0");
-      this.pumpStatRaw = false;
-    })();
+  autoMode(){
+      if(this.data.humi > this.maxH && this.fanStatRaw == 0){
+        this.fanStatRaw = 1;
+        this.sendState();
+      }
+      if(this.data.humi < this.maxH && this.fanStatRaw == 1){
+        this.fanStatRaw = 0;
+      }
   }
 
   dataHandler(dataRaw: string) {
@@ -138,16 +149,10 @@ export class AppComponent {
       this.data = input;
       console.log(this.data);
 
+
       if(this.auto){
-        if(this.data.humi > this.maxH && this.fanStatRaw == 0){
-          this.fanStatRaw = 1;
-          this.sendState();
-        }
-        if(this.data.humi < this.maxH && this.fanStatRaw == 1){
-          this.fanStatRaw = 0;
-        }
+        this.autoMode();
       }
-      
       
 
       

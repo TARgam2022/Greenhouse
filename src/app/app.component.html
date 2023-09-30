@@ -22,12 +22,19 @@
               </label>
         </li>
         <li class="nav-item" style="margin-left: 30px; margin-right: 2.5px;">
-            <img src="../assets/Grifo.svg" width="40px" style="margin-right: 2.5px; margin-left: 2.5px;">
-            <label class="switch">
-                <input [(ngModel)]="pumpStatRaw" (change)="sendState()" type="checkbox">
-                <span class="slider round"></span>
-              </label>
-        </li>
+          <img src="../assets/Grifo.svg" width="40px" style="margin-right: 2.5px; margin-left: 2.5px;">
+          <label class="switch">
+              <input [(ngModel)]="pumpStatRaw" (change)="sendState()" type="checkbox">
+              <span class="slider round"></span>
+            </label>
+      </li>
+      <li class="nav-item" style="margin-left: 30px; margin-right: 2.5px;">
+        <img src="../assets/bot.svg" width="40px" style="margin-right: 2.5px; margin-left: 2.5px;">
+        <label class="switch">
+            <input [(ngModel)]="auto" (change)="sendState()" type="checkbox">
+            <span class="slider round"></span>
+          </label>
+      </li>
       </ul>
     </div>
   </nav>
@@ -74,9 +81,9 @@
                  <br>
                  <h2 [ngStyle]="{'color': humdT ? 'red': 'black'}"  style="text-align: center;">{{data.humi}}(%)</h2>
                  <input [(ngModel)]="minH" type="number" id="humd" name="humd" min="0" max="50" value="25" style="width: 75px;">
-                 <p>Min temp</p>
+                 <p>Min humd</p>
                  <input [(ngModel)]="maxH" type="number" id="humd" name="humd" min="0" max="50" value="25" style="width: 75px;">
-                    <p>Max temp</p></div>
+                    <p>Max humd</p></div>
               </div>
               
           </div>
@@ -116,9 +123,9 @@
                  <br>
                  <h2 [ngStyle]="{'color': soilT ? 'red': 'black'}"  style="text-align: center;">{{data.sHumi_1}}(%)</h2>
                  <input [(ngModel)]="minS" type="number" id="humd" name="humd" min="0" max="50" value="25" style="width: 75px;">
-                 <p>Min temp</p>
+                 <p>Min soil</p>
                  <input [(ngModel)]="maxS" type="number" id="humd" name="humd" min="0" max="50" value="25" style="width: 75px;">
-                    <p>Max temp</p></div>
+                    <p>Max soil</p></div>
               </div>
             </div>
         </div>
