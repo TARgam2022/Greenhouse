@@ -73,10 +73,10 @@ export class AppComponent {
     this.maxT = 0;  
 
     this.minH = 0;
-    this.maxH = 60;
+    this.maxH = 70;
 
     this.minS = 0;
-    this.maxS = 0;
+    this.maxS = 50;
 
     this.humdT = false;
     this.soilT = false;
@@ -100,22 +100,22 @@ export class AppComponent {
   sendData(){
     (async () => { 
       // Do something before delay
-      console.log('before delay')
+      console.log("before delay " + this.fanStat + ";" + this.pumpStat)
       this.serial.sendData(this.fanStat + ";" + this.pumpStat);
 
       await new Promise(f => setTimeout(f, 2000));
 
       // Do something after
-      console.log('after delay')
+      console.log("after delay " + this.fanStat + ";0");
       this.serial.sendData(this.fanStat + ";0");
+      this.pumpStat = 0;
       this.pumpStatRaw = false;
     })();
   }
 
   sendState(){
     if(!this.auto){
-      console.log(this.pumpStatRaw + " + " + this.fanStatRaw);
-
+      //console.log(this.pumpStatRaw + " + " + this.fanStatRaw);
       if(this.pumpStatRaw){
         this.pumpStat = 1;
       }else{
@@ -128,9 +128,7 @@ export class AppComponent {
       else{
         this.fanStat = 0;
       }
-      
-      
-      console.log(this.pumpStat + " + " + this.fanStat);
+      //console.log(this.pumpStat + " + " + this.fanStat);
       //this.serial.sendData(this.fanStat + ";" + this.pumpStat);
       this.sendData();
     }
@@ -141,40 +139,53 @@ export class AppComponent {
   }
 
   autoMode(){
-    var dateFanAfter : Date= this.addMinutes(this.fanDate,1);
+    var datePumpAfter : Date= this.addMinutes(this.pumpDate,1);
+    var send = false;
     //console.log("new " + new Date() + " fandate - " + this.fanDate + " add - " + dateFanAfter);
-    if(this.data.humi > this.maxH && new Date() > dateFanAfter){
+    if(this.data.humi > this.maxH ){
       console.log("Activating Fan++++++++")
       this.fanStatRaw = 1;
       this.fanStat = 1;
+      this.pumpStat = 0;
+      this.pumpStatRaw = 0;
       this.fanDate = new Date();
-      this.sendData();
+      //this.sendData();
+      send = true;
     }
     if(this.data.humi < this.maxH && this.fanStatRaw == 1){
       console.log("DeActivating Fan------")
       this.fanStatRaw = 0;
       this.fanStat = 0;
-      this.sendData();
+      this.pumpStat = 0;
+      this.pumpStatRaw = 0;
+      //.sendData();
+      send = true;
     }
-    /*if(this.data.sHumi_1 < this.maxS && new Date() > datePumpAfter){
+    if(this.data.sHumi_1 < this.maxS && new Date() > datePumpAfter){
+      console.log("Activating Pump++++++++")
       this.pumpStat = 1;
       this.pumpStatRaw = 1;
       this.pumpDate = new Date();
-      this.sendData();
+      //this.sendData();
+      send = true;
     }
-    if(this.data.sHumi_1 > this.maxS){
+    if(this.data.sHumi_1 > this.maxS && this.pumpStatRaw == 1){
+      console.log("DeActivating Pump-------")
       this.pumpStatRaw = 0;
       this.pumpStat = 0;
+      //this.sendData();
+      send = true;
+    }
+    if(send)
       this.sendData();
-    }*/
   }
 
   dataHandler(dataRaw: string) {
-    console.log(dataRaw);
+    //console.log(dataRaw);
     try {
       let input : Data = JSON.parse(dataRaw);
       this.data = input;
-      console.log(this.data);
+      //console.log(this.data);
 
 
       if(this.auto){
