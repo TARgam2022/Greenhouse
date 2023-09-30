@@ -45,6 +45,9 @@ export class AppComponent {
   public slider_1: any;
   public message: any;
 
+  public connectState: any;
+  public humidityState: any;
+
   public serial: any;
   public pumpDate = new Date();
   public fanDate = new Date();
@@ -77,6 +80,9 @@ export class AppComponent {
 
     this.minS = 0;
     this.maxS = 50;
+
+    this.connectState = "Not Connected!";
+    this.humidityState = "NaN";
 
     this.humdT = false;
     this.soilT = false;
@@ -121,6 +127,7 @@ export class AppComponent {
 
   sendState(){
     if(!this.auto){
+      this.humidityState = "Auto Mode not activated!";
       //console.log(this.pumpStatRaw + " + " + this.fanStatRaw);
       if(this.pumpStatRaw){
         this.pumpStat = 1;
@@ -175,6 +182,7 @@ export class AppComponent {
       send = true;
     }else if(this.data.sHumi_1 > this.maxS && this.pumpStatRaw == 1){
       console.log("DeActivating Pump-------")
+      this.humidityState = "Waiting Till Cooldown";
       this.pumpStatRaw = 0;
       this.pumpStat = 0;
       //this.sendData();
@@ -186,6 +194,8 @@ export class AppComponent {
   }
 
   dataHandler(dataRaw: string) {
+    
+    this.connectState = "Connected!";
     //console.log(dataRaw);
     try {
       let input : Data = JSON.parse(dataRaw);
@@ -195,6 +205,7 @@ export class AppComponent {
 
       if(this.auto){
         this.autoMode();
+        this.humidityState = "Waiting till Cooldown";
       }
       
 
@@ -209,9 +220,12 @@ export class AppComponent {
 
   start(){
     this.serial.sendData("START");
+    this.humidityState = "Auto Mode not activated!";
   }
 
   dc(): void {
+    this.connectState = "Disconnected!";
+
     if (this.port)
       this.serial.close((port: any) => {
         this.port = port;
