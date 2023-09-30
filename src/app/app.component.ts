@@ -80,6 +80,7 @@ export class AppComponent {
 
     this.humdT = false;
     this.soilT = false;
+    this.pumpDate = new Date(this.pumpDate.getTime() - 1*60000);
 
     this.data = {
       temp: 0,
@@ -98,7 +99,8 @@ export class AppComponent {
     }
   }
   sendData(){
-    (async () => { 
+    if(this.pumpStat == 1){
+      (async () => { 
       // Do something before delay
       console.log("before delay " + this.fanStat + ";" + this.pumpStat)
       this.serial.sendData(this.fanStat + ";" + this.pumpStat);
@@ -106,11 +108,15 @@ export class AppComponent {
       await new Promise(f => setTimeout(f, 2000));
 
       // Do something after
-      console.log("after delay " + this.fanStat + ";0");
+      console.log("after delay " + this.fanStat + this.pumpStat);
       this.serial.sendData(this.fanStat + ";0");
       this.pumpStat = 0;
       this.pumpStatRaw = false;
     })();
+    } else {
+      this.serial.sendData(this.fanStat + ";" + this.pumpStat);
+    }
+    
   }
 
   sendState(){
@@ -151,8 +157,7 @@ export class AppComponent {
       this.fanDate = new Date();
       //this.sendData();
       send = true;
-    }
-    if(this.data.humi < this.maxH && this.fanStatRaw == 1){
+    }else if(this.data.humi < this.maxH && this.fanStatRaw == 1){
       console.log("DeActivating Fan------")
       this.fanStatRaw = 0;
       this.fanStat = 0;
@@ -168,14 +173,14 @@ export class AppComponent {
       this.pumpDate = new Date();
       //this.sendData();
       send = true;
-    }
-    if(this.data.sHumi_1 > this.maxS && this.pumpStatRaw == 1){
+    }else if(this.data.sHumi_1 > this.maxS && this.pumpStatRaw == 1){
       console.log("DeActivating Pump-------")
       this.pumpStatRaw = 0;
       this.pumpStat = 0;
       //this.sendData();
       send = true;
     }
+
     if(send)
       this.sendData();
   }
