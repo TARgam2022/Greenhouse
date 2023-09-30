@@ -46,6 +46,8 @@ export class AppComponent {
   public message: any;
 
   public serial: any;
+  public pumpDate = new Date();
+  public fanDate = new Date();
   public data : Data ;
   //data = {temp: Number, humi: Number, bright: Number, sHumi: Number};
   public port: any;
@@ -71,7 +73,7 @@ export class AppComponent {
     this.maxT = 0;  
 
     this.minH = 0;
-    this.maxH = 0;
+    this.maxH = 60;
 
     this.minS = 0;
     this.maxS = 0;
@@ -95,7 +97,20 @@ export class AppComponent {
       });
     }
   }
-  
+  sendData(){
+    (async () => { 
+      // Do something before delay
+      console.log('before delay')
+      this.serial.sendData(this.fanStat + ";" + this.pumpStat);
+
+      await new Promise(f => setTimeout(f, 2000));
+
+      // Do something after
+      console.log('after delay')
+      this.serial.sendData(this.fanStat + ";0");
+      this.pumpStatRaw = false;
+    })();
+  }
 
   sendState(){
     if(!this.auto){
@@ -117,29 +132,41 @@ export class AppComponent {
       
       console.log(this.pumpStat + " + " + this.fanStat);
       //this.serial.sendData(this.fanStat + ";" + this.pumpStat);
-      (async () => { 
-        // Do something before delay
-        console.log('before delay')
-        this.serial.sendData(this.fanStat + ";" + this.pumpStat);
-  
-        await new Promise(f => setTimeout(f, 2000));
-  
-        // Do something after
-        console.log('after delay')
-        this.serial.sendData(this.fanStat + ";0");
-        this.pumpStatRaw = false;
-      })();
+      this.sendData();
     }
   }
 
+  addMinutes(date: Date, minutes : number) {
+    return new Date(date.getTime() + minutes*60000);
+  }
+
   autoMode(){
-      if(this.data.humi > this.maxH && this.fanStatRaw == 0){
-        this.fanStatRaw = 1;
-        this.sendState();
-      }
-      if(this.data.humi < this.maxH && this.fanStatRaw == 1){
-        this.fanStatRaw = 0;
-      }
+    var dateFanAfter : Date= this.addMinutes(this.fanDate,1);
+    //console.log("new " + new Date() + " fandate - " + this.fanDate + " add - " + dateFanAfter);
+    if(this.data.humi > this.maxH && new Date() > dateFanAfter){
+      console.log("Activating Fan++++++++")
+      this.fanStatRaw = 1;
+      this.fanStat = 1;
+      this.fanDate = new Date();
+      this.sendData();
+    }
+    if(this.data.humi < this.maxH && this.fanStatRaw == 1){
+      console.log("DeActivating Fan------")
+      this.fanStatRaw = 0;
+      this.fanStat = 0;
+      this.sendData();
+    }
+    /*if(this.data.sHumi_1 < this.maxS && new Date() > datePumpAfter){
+      this.pumpStat = 1;
+      this.pumpStatRaw = 1;
+      this.pumpDate = new Date();
+      this.sendData();
+    }
+    if(this.data.sHumi_1 > this.maxS){
+      this.pumpStatRaw = 0;
+      this.pumpStat = 0;
+      this.sendData();
+    }*/
   }
 
   dataHandler(dataRaw: string) {
