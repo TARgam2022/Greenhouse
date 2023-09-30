@@ -25,6 +25,8 @@ export class AppComponent {
   public pumpStatRaw: any;
   public fanStatRaw: any;
 
+  public auto: any;
+
   public minT: any;
   public maxT: any;
 
