@@ -28,7 +28,7 @@ import { TempChartComponent } from './temp-chart/temp-chart.component';
     BrowserModule,
   FormsModule,
   ReactiveFormsModule,
-  NgApexchartsModule,
+  NgApexchartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
